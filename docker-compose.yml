@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/media_platform
+      - JWT_SECRET=replace-me
+      - REDIS_URL=redis://redis:6379
+      - BASE_STREAM_URL=http://localhost:5000/stream
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
